@@ -11,13 +11,13 @@ import socket
 client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
 # Realiza e estabelece uma conexão com o servidor (endereço)
-# `example.com`, na porta 80.
-client.connect(("example.com", 80))
+# `locahost`, na porta 9000.
+client.connect(("localhost", 9000))
 
 # Monta o texto da Request especificando o método HTTP, a URL e o recurso e
 # por fim, indicando qual a versão e protocolo utilizado, no caso o HTTP 1.0
 # `encode` garante que a string estará em bytes no formato UTF-8.
-cmd = "GET http://example.com/index.html HTTP/1.0\r\n\r\n".encode()
+cmd = "GET http://localhost/index.html HTTP/1.0\r\n\r\n".encode()
 
 # Envia a Request para a conexão estabelecida.
 client.send(cmd)
