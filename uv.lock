@@ -3,6 +3,21 @@ revision = 1
 requires-python = ">=3.13"
 
 [[package]]
+name = "legacy-cgi"
+version = "2.6.2"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/ad/2e/e1860989bc6cfdecba66db37f2f783636b97a1248ac25fbe864b6e931c22/legacy_cgi-2.6.2.tar.gz", hash = "sha256:9952471ceb304043b104c22d00b4f333cac27a6abe446d8a528fc437cf13c85f", size = 24794 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/4c/cd/54d1fd92d7f6aca9523d8583052e00b273bdfe28aa7fd54a3a5759dab05e/legacy_cgi-2.6.2-py3-none-any.whl", hash = "sha256:a7b83afb1baf6ebeb56522537c5943ef9813cf933f6715e88a803f7edbce0bff", size = 19572 },
+]
+
+[[package]]
 name = "linuxtips-python-webapi"
 version = "0.1.0"
 source = { virtual = "." }
+dependencies = [
+    { name = "legacy-cgi" },
+]
+
+[package.metadata]
+requires-dist = [{ name = "legacy-cgi", specifier = ">=2.6.2" }]
