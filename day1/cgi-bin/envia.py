@@ -1,11 +1,20 @@
 #!/usr/bin/env python
+
+# Módulo de interface para processar requisições POST
 import cgi
 
+# Coletando todas as informações do formulário
+# enviado através de `FieldStorage`.
 form = cgi.FieldStorage()
 
+# Coletando o valor do campo `nome`.
 nome = form.getvalue("nome")
+# Coletando o valor do campo `mensagem`.
 mensagem = form.getvalue("mensagem")
 
+# Devolvendo uma resposta com prints.
+# Cada linha é um print pois a resposta deve ser um iterável.
+# Neste caso, a interface de saída padrão é o navegador.
 print("Content-type:text/html\r\n\r\n")
 print("<html>")
 print("<head>")
