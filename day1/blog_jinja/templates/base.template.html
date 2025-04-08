@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Blog</title>
+    <!-- Bloco de código (placeholder) que pode ser substituído em outros templates -->
+    {% block style %}
+        <link rel="stylesheet" href="https://unpkg.com/marx-css/css/marx.min.css">
+        <style>
+            body {
+                max-width: 800px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+            h1 {
+                margin: 0 0 0 0.35em;
+                color: #fff;
+                background-color: rebeccapurple;
+                padding: 24px;
+            }
+            p {
+                color: #222;
+            }
+            small {
+                color: darkgray;
+            }
+            input[type=text] {
+                width: 100%;
+            }
+            textarea {
+                width: 100%;
+            }
+            input[type=submit] {
+                background-color: green;
+                padding: 16px 32px;
+                margin: 4px 2px;
+                color: white;
+                font-weight: bold;
+            }
+        </style>
+    {% endblock %}
+</head>
+
+<body>
+    <!-- Bloco de código substituível com identificador `headline` -->
+    <!-- O bloco precisa começar com `block` e terminar com `endblock` -->
+    <h1>{% block headline %} {% endblock %}</h1>
+    <hr>
+    <!-- Bloco de código substituível com identificador `content` -->
+    <!-- O bloco precisa começar com `block` e terminar com `endblock` -->
+    {% block content %} {% endblock %}
+    <hr>
+    <!-- Bloco de código substituível com identificador `author` -->
+    <!-- O bloco precisa começar com `block` e terminar com `endblock` -->
+    <small>{% block footer %} Copyright 2025 {% endblock %}</small>
+</body>
+</html>

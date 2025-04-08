@@ -1,0 +1,17 @@
+<!-- Indica que este template extende de um template base `base.template.html` -->
+{% extends "base.template.html" %}
+
+<!-- Substituindo o conteúdo do bloco `headline` do template base -->
+{% block headline %}
+    Blog Posts:
+{% endblock %}
+
+<!-- Substituindo o conteúdo do bloco `context` do template base -->
+{% block content %}
+    <ul>
+        <!-- Estrutura de repetição for para exibir todos os posts do blog -->
+        {%- for post in post_list %}
+            <li> <a href="/{{ post.id }}"> {{ post.title }} </a> </li>
+        {%- endfor %}
+    </ul>
+{% endblock %}

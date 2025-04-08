@@ -1,0 +1,46 @@
+<!-- Indica que este template extende do template `base.template.html`
+
+Neste caso, os blocos especificados no template base poderão ser substituídos
+pelos blocos declarados neste arquivo.
+-->
+{% extends "base.template.html" %}
+
+<!-- Substituindo o conteúdo do bloco `headline` no template base -->
+{% block headline %}
+New Post
+{% endblock %}
+
+<!-- Criando um macro (função) para gerar campos de formulário personalizados
+
+Gera campos de formulário com nome identificador dinâmico.
+Consegue gerar tanto `input` quanto `textarea` com base na
+chamada do macro.
+
+- `field` é o nome do macro, utilizado para invocá-lo.
+- `name` e `type` são os parâmetros que podem ser passados,
+  `type` possui um padrão caso nada seja passado.
+-->
+{% macro field(name, type="input") %}
+<!-- `capitalize` é um filtro que faz a primeira letra do placeholder ficar maiúscula -->
+<label for="{{ name }}">{{name | capitalize}}:</label><br>
+<!-- Verifica se o type inserido é para ser um campo `input` -->
+{%- if type == "input" %}
+<input type="text" name="{{ name }}"><br>
+<!-- Verifica se o type inserido é para ser um campo `textarea` -->
+{%- elif type == "textarea" %}
+<textarea name="{{ name }}" cols="30" rows="5"></textarea><br>
+{%- endif %}
+{% endmacro %}
+
+<!-- Substituindo o conteúdo do bloco `context` no template base -->
+{% block content %}
+<form action="/new" method="post">
+    <!-- Chamando o macro `field` e passando os parâmetros para
+        gerar os campos do formulário dinamicamente. 
+        -->
+    {{ field("title") }}
+    {{ field("content", type="textarea") }}
+    {{ field("author") }}
+    <input type="submit" value="Enviar">
+</form>
+{% endblock %}

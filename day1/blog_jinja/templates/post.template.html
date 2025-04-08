@@ -1,0 +1,19 @@
+<!-- Indica que este template extende de um template base `base.template.html` -->
+{% extends "base.template.html" %}
+
+<!-- Substituindo o conteúdo do bloco `headline` do template base -->
+{% block headline %}
+    {{ post.title }}
+{% endblock %}
+
+<!-- Substituindo o conteúdo do bloco `content` do template base -->
+{% block content %}
+    <p>
+        {{ post.content }}
+    </p>
+{% endblock %}
+
+<!-- Substituindo o conteúdo do bloco `footer` do template base -->
+{% block footer %}
+    {{ post.author }}
+{% endblock %}
