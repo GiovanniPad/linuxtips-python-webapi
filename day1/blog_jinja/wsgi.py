@@ -1,5 +1,9 @@
 # Módulo para tratar requisições POST de formulários.
 import cgi
+
+# Módulo para trabalhar com JSON.
+import json
+
 # Variável `conn` para conexão com o servidor.
 from database import conn
 
@@ -71,8 +75,9 @@ def application(environ, start_response):
     body = b"Content Not Found"
     # Status code padrão, caso não encontrar nenhuma rota.
     status = "404 Not Found"
-    # Definindo o cabeçalho da resposta.
-    headers = [("Content-Type", "text/html")]
+
+    # Definindo o tipo padrão de retorno de conteúdo.
+    content_type = "text/html"
 
     # Coletando o caminho/URL (rota) que o usuário está acessando.
     path = environ["PATH_INFO"]
@@ -92,6 +97,20 @@ def application(environ, start_response):
 
         # Define o status code de sucesso.
         status = "200 OK"
+    
+    # Rota para retornar todo os posts no formato JSON.
+    elif path == "/api" and method == "GET":
+        # Retorna todos os posts do banco de dados.
+        posts = get_posts_from_database()
+        # Define o status code de sucesso.
+        status = "200 OK"
+        # Converte a resposta para JSON e realiza o encode para
+        # bytes usando o formato `utf-8`, pois é melhor para
+        # trafegar na rede.
+        body = json.dumps(posts).encode("utf-8")
+
+        # Define que o tipo de conteúdo a ser retornado é JSON.
+        content_type = "application/json"
 
     # Rota para retornar o post requisitado através da Request.
     elif path.split("/")[-1].isdigit() and method == "GET":
@@ -144,6 +163,9 @@ def application(environ, start_response):
         body = b"New post created with success!"
         # Status code que indica que o post foi criado com sucesso.
         status = "201 Created"
+
+    # Definindo o cabeçalho da resposta, com o tipo de conteúdo dinâmico.
+    headers = [("Content-Type", content_type)]
 
     # Função de callback que atribui o código de status e o cabeçalho
     # na Response.
