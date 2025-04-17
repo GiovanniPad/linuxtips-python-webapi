@@ -1,22 +1,71 @@
-# Módulo para tratar requisições POST de formulários.
-import cgi
+# Módulo do framework.
+from joe import Joe
 
-# Módulo para trabalhar com JSON.
-import json
-
-# Variável `conn` para conexão com o servidor.
+# Módulo para conectar ao banco de dados.
 from database import conn
 
-# Biblioteca para trabalhar com templates em Python
-from jinja2 import Environment, FileSystemLoader
+# Instanciando o app principal do framework.
+app = Joe()
 
-# Declarando e configurando o ambiente para trabalhar com templates.
-# `Environment` declara o ambiente e `loader` é o tipo de template que
-# vai ser carregado.
-# `FileSystemLoader` indica que o tipo de loader a ser utilizado é de
-# arquivos, ou seja, os templates são arquivos.
-# `./templates` é o caminho em que se encontra os arquivos do template.
-env = Environment(loader=FileSystemLoader("./templates"))
+
+# Definindo a rota para listar todos os posts.
+# O primeiro argumento é a Regular expression para definir a rota.
+# O segundo argumento é o caminho e nome do template.
+@app.route(r"^/$", template="list.template.html")
+def post_list():
+    # Coleta todos os posts do banco de dados.
+    posts = get_posts_from_database()
+    # Retorna a lista de posts para o template.
+    return {"post_list": posts}
+
+
+# Rota para retonra todos os posts no formato JSON para comunicar com APIs.
+# O primeiro argumento é a Regular expression para definir a rota.
+# O segundo argumento é o caminho e nome do template.
+@app.route("^/api$")
+def post_list_api():
+    # Coleta todos os posts do banco de dados.
+    posts = get_posts_from_database()
+    # Retorna a lista de posts e indica que é no formato JSON.
+    return {"post_list": posts}, "200 OK", "application/json"
+
+
+# Definindo a rota para exibir as informações de um único post.
+# O primeiro argumento é a Regular expression para definir a rota.
+# O segundo argumento é o caminho e nome do template.
+@app.route(r"^/(?P<id>\d{1,})$", template="post.template.html")
+def post_detail(id):
+    # Coleta o post a ser exibido através do ID dele, passado pela função.
+    post = get_posts_from_database(post_id=id)[0]
+    # Retorna os dados do post para o template.
+    return {"post": post}
+
+
+# Rota apenas para exibir o formulário para adicionar um post.
+# O primeiro argumento é a Regular expression para definir a rota.
+# O segundo argumento é o caminho e nome do template.
+@app.route(r"^/new$", template="form.template.html")
+def new_post_form():
+    # Retorna nada, pois é apenas para renderizar o template.
+    return {}
+
+
+# Rota para processar os dados enviados através do formulário e
+# criar um novo post no banco de dados.
+# O primeiro argumento é a Regular expression para definir a rota.
+# O segundo argumento é o caminho e nome do template.
+@app.route(r"^/new$", method="POST")
+def new_post_add(form):
+    # Converte os dados do formulário em um dicionário usando
+    # dict comprehension.
+    post = {item.name: item.value for item in form.list}
+    # Cria o novo post no banco de dados.
+    add_new_post(post)
+    # Retorna a mensagem de sucesso indicado que é texto puro.
+    return "New post created with success!", "201 Created", "text/plain"
+
+
+# Controllers
 
 
 # Função para pegar posts no banco de dados.
@@ -41,12 +90,6 @@ def get_posts_from_database(post_id=None):
     return [dict(zip(fields, post)) for post in results]
 
 
-# Função para renderizar e retornar o template escolhido.
-def render_template(template_name, **context):
-    template = env.get_template(template_name)
-    return template.render(**context).encode()
-
-
 # Função para criar um novo post.
 def add_new_post(post):
     # Cria um cursor para inserir um novo registro no banco de dados.
@@ -66,109 +109,7 @@ def add_new_post(post):
     conn.commit()
 
 
-# Função que o servidor WSGI vai chamar (callable).
-# `environ` representa todo o ambiente passado pela chamada do cliente.
-# `start_response` é a função de callback que vai devolver a resposta.
-def application(environ, start_response):
-    # Conteúdo do corpo da resposta caso não encontrar nenhuma rota.
-    # O conteúdo do corpo deve ser em bytes.
-    body = b"Content Not Found"
-    # Status code padrão, caso não encontrar nenhuma rota.
-    status = "404 Not Found"
-
-    # Definindo o tipo padrão de retorno de conteúdo.
-    content_type = "text/html"
-
-    # Coletando o caminho/URL (rota) que o usuário está acessando.
-    path = environ["PATH_INFO"]
-    # Coletando o método HTTP usado para realizar a Request.
-    method = environ["REQUEST_METHOD"]
-
-    # Roteamento de rotas/URLs
-
-    # Rota raiz para retornar todos os posts ao usuário.
-    if path == "/" and method == "GET":
-        # Requisita todos os posts do banco de dados.
-        posts = get_posts_from_database()
-        # Carrega o template para listar os posts para o usuário.
-        # `get_post_list` gera a lista de posts em HTML e passa para
-        # a função de renderizar o template.
-        body = render_template("list.template.html", post_list=posts)
-
-        # Define o status code de sucesso.
-        status = "200 OK"
-    
-    # Rota para retornar todo os posts no formato JSON.
-    elif path == "/api" and method == "GET":
-        # Retorna todos os posts do banco de dados.
-        posts = get_posts_from_database()
-        # Define o status code de sucesso.
-        status = "200 OK"
-        # Converte a resposta para JSON e realiza o encode para
-        # bytes usando o formato `utf-8`, pois é melhor para
-        # trafegar na rede.
-        body = json.dumps(posts).encode("utf-8")
-
-        # Define que o tipo de conteúdo a ser retornado é JSON.
-        content_type = "application/json"
-
-    # Rota para retornar o post requisitado através da Request.
-    elif path.split("/")[-1].isdigit() and method == "GET":
-        # Coleta o ID do post a ser exibido.
-        post_id = path.split("/")[-1]
-
-        # Renderiza o template de exibir um post no corpo da resposta.
-        # `get_posts_from_database` coleta os dados do post em questão,
-        # utilizando o ID para realizar a pesquisa.
-        body = render_template(
-            "post.template.html",
-            post=get_posts_from_database(post_id=post_id)[0],
-        )
-
-        # Define o código de status como sucesso.
-        status = "200 OK"
-
-    # Rota para retornar o formulário de criar um novo post.
-    elif path == "/new" and method == "GET":
-        # Renderiza o template do formulário no corpo da resposta.
-        body = render_template("form.template.html")
-        # Define o status de sucesso.
-        status = "200 OK"
-
-    # Rota para receber os dados do formulário de criar um novo post e
-    # processá-los e adicionar o novo post no banco de dados.
-    elif path == "/new" and method == "POST":
-
-        # Coletando os dados do formulário usando cgi.
-        # `fp` é o file pointer, que indica da onde os dados estão vindo,
-        # neste caso, por usar um servidor WSGI é necessário
-        # apontar o `wsgi.input` como origem dos dados.
-        # `environ` indica o ambiente, em formato de dicionário.
-        # `keep_blank_values` faz com que o cgi mantenha os campos vazios.
-        form = cgi.FieldStorage(
-            fp=environ["wsgi.input"], environ=environ, keep_blank_values=1
-        )
-
-        # Dict Comprehension, cria um dicionário, onde cada par chave-valor
-        # representa um input do formulário enviado. A chave sendo o
-        # nome do input e o valor é o valor contido no input.
-        # `form.list` retorna uma lista de tuplas, onde cada tupla
-        # representa um input do formulário.
-        post = {item.name: item.value for item in form.list}
-
-        # Invoca a função para adicionar um novo post no banco de dados.
-        add_new_post(post)
-
-        # Atribui uma mensagem que o post foi criado ao corpo da resposta.
-        body = b"New post created with success!"
-        # Status code que indica que o post foi criado com sucesso.
-        status = "201 Created"
-
-    # Definindo o cabeçalho da resposta, com o tipo de conteúdo dinâmico.
-    headers = [("Content-Type", content_type)]
-
-    # Função de callback que atribui o código de status e o cabeçalho
-    # na Response.
-    start_response(status, headers)
-    # Retorna o corpo em formato de lista (iterável) para a Response.
-    return [body]
+# Executa indefinidamente o servidor wsgi.
+if __name__ == "__main__":
+    # Função para executar o servidor WSGI em loop.
+    app.run()

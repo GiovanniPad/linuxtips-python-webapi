@@ -1,9 +1,12 @@
 # Módulo para tratar requisições POST de formulários.
 import cgi
+
 # Variável `conn` para conexão com o servidor.
 from database import conn
+
 # Função para trabalhar com caminhos no SO.
 from pathlib import Path
+
 
 # Função para pegar posts no banco de dados.
 # `post_id` representa o ID do post.
@@ -41,8 +44,7 @@ def get_post_list(posts):
     # List Comprehension que cria uma lista onde cada item `li` é um post,
     # que contém o `href` (link) e o seu título.
     post_list = [
-        f"""<li> <a href='{post["id"]}'> {post['title']} </a> </li>"""
-        for post in posts
+        f"""<li> <a href='{post["id"]}'> {post["title"]} </a> </li>""" for post in posts
     ]
     # Junta cada item `li` (post) em uma string separando-os
     # por quebra de linha.
@@ -94,9 +96,7 @@ def application(environ, start_response):
         # Carrega o template para listar os posts para o usuário.
         # `get_post_list` gera a lista de posts em HTML e passa para
         # a função de renderizar o template.
-        body = render_template(
-            "list.template.html", post_list=get_post_list(posts)
-        )
+        body = render_template("list.template.html", post_list=get_post_list(posts))
 
         # Define o status code de sucesso.
         status = "200 OK"
@@ -127,7 +127,6 @@ def application(environ, start_response):
     # Rota para receber os dados do formulário de criar um novo post e
     # processá-los e adicionar o novo post no banco de dados.
     elif path == "/new" and method == "POST":
-
         # Coletando os dados do formulário usando cgi.
         # `fp` é o file pointer, que indica da onde os dados estão vindo,
         # neste caso, por usar um servidor WSGI é necessário

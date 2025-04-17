@@ -31,7 +31,7 @@ posts = [
         """,
         "author": "Satoshi Namamoto",
     },
-        {
+    {
         "title": "Como criar um blog utilizando Python",
         "content": """\
         Neste tutorial você aprenderá como criar um blog utilizando Python.
@@ -56,7 +56,7 @@ if not count:
         """,
         posts,
     )
-    
+
     # Realiza o commit das mudanças
     conn.commit()
 

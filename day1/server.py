@@ -43,8 +43,7 @@ try:
         # seja enviado tudo de uma vez.
         # `encode` converte uma string (UTF8) para bytes para trafegar.
         client.sendall(
-            "HTTP/1.0 200 OK\r\n\r\n<html><body>Hello</body></html>\r\n\r\n"
-            .encode()
+            "HTTP/1.0 200 OK\r\n\r\n<html><body>Hello</body></html>\r\n\r\n".encode()
         )
 
         # Encerra a instância do Client.

@@ -26,6 +26,7 @@ def application(environ, start_response):
 if __name__ == "__main__":
     # Importa o método para criar o servidor.
     from wsgiref.simple_server import make_server
+
     # Abre o servidor, escutando qualquer chamada e na porta 8000,
     # passando a função application que vai tratar as chamadas.
     server = make_server("0.0.0.0", 8000, application)

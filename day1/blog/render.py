@@ -1,5 +1,6 @@
 # Biblioteca para manipular caminhos do SO.
 from pathlib import Path
+
 # Conexão com o banco de dados.
 from database import conn
 
@@ -23,6 +24,7 @@ site_dir = Path("site")
 # Cria a pasta, caso não existir.
 site_dir.mkdir(exist_ok=True)
 
+
 # 3. Criar uma função para gerar a url com slug
 # Função para criar uma url a partir de dados existentes (slug).
 def get_post_url(post):
@@ -30,7 +32,8 @@ def get_post_url(post):
     # `replace` substitui espaços em branco por "-".
     slug = post["title"].lower().replace(" ", "-")
     return f"{slug}.html"
- 
+
+
 # 4. Renderizar a página index.html
 # Acessa através de `Path` o arquivo de template do index.
 # `read_text` abre o arquivo, lê todo o conteúdo e fecha.
@@ -42,16 +45,13 @@ index_page = site_dir / Path("index.html")
 # List Comprehension parar criar os itens da lista a partir de cada post.
 # Usando a função `get_post_url` para gerar a URL de acesso.
 post_list = [
-    f"<li> <a href='{get_post_url(post)}'> {post['title']} </a> </li>"
-    for post in posts
+    f"<li> <a href='{get_post_url(post)}'> {post['title']} </a> </li>" for post in posts
 ]
 
 # Utiliza o método `write_text` para abrir o arquivo, escreve todo o
 # conteúdo no arquivo e fecha.
 # É possível utilizar o String Format `format` para inserir os dados.
-index_page.write_text(
-    index_template.format(post_list="\n".join(post_list))
-)
+index_page.write_text(index_template.format(post_list="\n".join(post_list)))
 
 # 5. Renderizar as páginas do blog
 # Para cada post dos posts
@@ -59,7 +59,7 @@ for post in posts:
     # Acessa o template dos posts com `Path` e lê todo o conteúdo de texto
     # do arquivo usando `read_text`.
     post_template = Path("post.template.html").read_text()
-    
+
     # Define o caminho aonde o arquivo HTML final vai ser armazenado,
     # após, cria o arquivo HTML no caminho especificado.
     post_page = site_dir / Path(get_post_url(post))
