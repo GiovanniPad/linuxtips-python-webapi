@@ -4,6 +4,9 @@
 # `request` é o objeto que representa a requisição de um cliente.
 from flask import Flask, url_for, request
 
+# Importando a biblioteca para trabalhar com o banco de dados MongoDB.
+from flask_pymongo import PyMongo
+
 # Definindo a inst6ancia da aplicação a apartir da classe Flask.
 # `__name__` é o nome do arquivo, que representa a aplicação
 # que é passada ao parâmetro `import_name`, que é obrigatório e usado
@@ -15,6 +18,16 @@ app = Flask(__name__)
 # O dicionário `app.config` contém todas as variáveis e configurações que
 # são mantidas quando a aplicação é servida.
 app.config["APP_NAME"] = "Meu Blog"
+
+# Adicionando a configuração necessária para o MongoDB, que é a URI de
+# conexão para o banco de dados.
+app.config["MONGO_URI"] = "mongodb://localhost:27017/blog"
+
+# Adicionando a extensão do `PyMongo` para a aplicação, para isso é preciso
+# passar a instância da aplicação.
+# Essa linha está atribuindo a instância criada com `PyMongo(app)` para duas
+# variáveis ao mesmo tempo.
+mongo = app.mongo = PyMongo(app)
 
 
 # Definindo uma função para ser executada ao ocorrer o erro 404.
@@ -39,6 +52,9 @@ def not_found_page(error):
 @app.route("/", endpoint="index")
 # Defindo a função que vai ser executada ao chamar a rota acima.
 def hello():
+    # Acessando um registro da coleção `posts`.
+    posts = mongo.db.posts.find_one()
+
     # Coletando e armazenando a URL a partir da função que é executada
     # por essa rota, no caso a função `read_content`.
     # `title` é um parâmetro passado a essa função.
@@ -61,6 +77,9 @@ def hello():
         # neste caso, ele está exibindo todos os dados recebidos via
         # query string.
         f"{request.args}"
+        # Retornando na response o registro retornado e convertendo
+        # para lista antes.
+        f"{list(posts)}"
     ), 201
 
 
