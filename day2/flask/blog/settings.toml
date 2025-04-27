@@ -1,0 +1,10 @@
+# Configurações padrões.
+[default]
+# URI de conexão do banco de dados.
+mongo_uri = "mongodb://localhost:27017/blog"
+# Título da aplicação.
+title = "Meu Blog"
+# Extensões/plugins da aplicação, usado pelo Dynaconf.
+extensions = [
+    "blog.database:configure"
+]
