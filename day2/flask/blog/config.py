@@ -1,5 +1,6 @@
 # Biblioteca para trabalhar com caminhos do OS.
 import os
+
 # Classe para inicializar e configurar uma aplicação Flask.
 from dynaconf import FlaskDynaconf
 

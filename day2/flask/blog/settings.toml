@@ -6,5 +6,6 @@ mongo_uri = "mongodb://localhost:27017/blog"
 title = "Meu Blog"
 # Extensões/plugins da aplicação, usado pelo Dynaconf.
 extensions = [
-    "blog.database:configure"
+    "blog.database:configure",
+    "blog.commands:configure"
 ]
