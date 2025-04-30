@@ -1,0 +1,27 @@
+{# 
+    Página herdada do template base, destinada a exibir as informações
+    de um único post selecionado.
+#}
+{% extends "base.html.j2" %}
+
+{% block content %}
+<div class="container">
+    {# 
+        Título do post.
+    #}
+    <h1> {{post.title}} </h1>
+    <div class="mt-4 p-5 bg-secondary text-white rounded">
+        {# 
+            Filtro criado nos plugins para formatar a data.
+        #}
+        <small> {{post.date | format_date }} </small>
+        <p>
+            {# 
+                Função para renderizar conteúdo markdown,
+                disponibilizada de forma global nos plugins.
+            #}
+            {{ markdown(post.content) }}
+        </p>
+    </div>
+</div>
+{% endblock %}

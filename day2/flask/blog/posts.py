@@ -8,6 +8,10 @@ from blog.database import mongo
 # Biblioteca para trabalhar com datas e horas.
 from datetime import datetime
 
+# Constante para informar que é para ordenar de forma
+# descendente.
+from pymongo import DESCENDING
+
 
 # Função para retornar todos os posts que estão publicados ou não, por padrão,
 # retorna apenas os posts publicados.
@@ -16,8 +20,9 @@ def get_all_posts(published: bool = True):
     # Conecta ao banco de dados e acessa a coleção `posts` e busca todos os
     # posts com base na variável `published`.
     posts = mongo.db.get_collection("posts").find({"published": published})
-    # Retorna todos os posts, ordenando-os pelo campo `date`.
-    return posts.sort("date")
+    # Retorna todos os posts, ordenando-os pelo campo `date`
+    # de forma descendente.
+    return posts.sort("date", DESCENDING)
 
 
 # Função para retornar um post com base em um slug.

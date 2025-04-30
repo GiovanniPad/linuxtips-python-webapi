@@ -10,5 +10,11 @@ setup(
     # Indica os pacotes necessários (dependências).
     packages=["blog"],
     # Bibliotecas necessárias para que funcione.
-    install_requires=["flask", "flask-pymongo", "dynaconf"],
+    install_requires=[
+        "flask",
+        "flask-pymongo",
+        "dynaconf",
+        "bootstrap-flask",
+        "mistune",
+    ],
 )

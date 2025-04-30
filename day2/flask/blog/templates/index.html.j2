@@ -1,0 +1,36 @@
+{# 
+    Página index que herda do template base, destinada a exibir
+    todos os posts criados e ativos do blog.
+#}
+{% extends "base.html.j2" %}
+
+{% block content %}
+<div class="container">
+    {# 
+        Variável de configuração global do Flask,
+        `TITLE` refere-se ao título da aplicação definido
+        em `settings.toml`.
+    #}
+    <h1>{{config.get('TITLE')}}</h1>
+
+    <div class="mt-4 p-5 bg-secondary text-white rounded">
+        <ul class="list-group">
+            {# 
+                Estrutura de repetição `for` que exibe todos os posts.
+            #}
+            {% for post in posts %}
+            <li class="list-group-item">
+                {# 
+                    No `href` a função `url_for` está gerando uma URL para
+                    este post ao chamar a função `detail` do blueprint `post`,
+                    passando o slug de cada post.
+                    `post.title` é o título do post, com um filtro de título (iniciais de cada
+                    palavra fica em maiúsculo).
+                #}
+                <a href="{{url_for('post.detail', slug=post.slug)}}">{{post.title | title }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

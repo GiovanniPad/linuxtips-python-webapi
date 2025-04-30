@@ -1,0 +1,57 @@
+{# 
+    Template base que define a estrutura principal do blog.
+    Todos os demais templates hendarem desse template.
+    Por conta da extensão `bootstrap_flask` o framework
+    Bootstrap está disponível.
+#}
+
+<!doctype html>
+<html lang="en">
+    <head>
+        {# 
+            Bloco `head` é referente ao <head> de uma página HTML,
+            podendo incluir novas tags de metadados.
+        #}
+        {% block head %}
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+        {# 
+            Bloco `styles` permite adicionar estilos CSS.
+        #}
+        {% block styles %}
+            {# 
+                `load_css` importa o CSS do Bootstrap automaticamente.
+            #}
+            {{ bootstrap.load_css() }}
+        {% endblock %}
+
+        <title>{{config.get('TITLE')}}</title>
+        {% endblock %}
+    </head>
+    <body>
+        <div class="navbar container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/">
+                    <img alt="Brand" src="https://placehold.co/150x50?text=BLOG">
+                </a>
+            </div>
+        </div>
+
+        {# 
+            Bloco `content`, destinado ao conteúdo principal de cada página.
+        #}
+        {% block content %}{% endblock %}
+
+        {# 
+            Bloco `scripts` permite a inclusão de scripts JavaScript personalizados.
+        #}
+        {% block scripts %}
+            <!-- Optional JavaScript -->
+            {# 
+                `load_js` carrega o JavaScript do Bootstrap para uso.
+            #}
+            {{ bootstrap.load_js() }}
+        {% endblock %}
+    </body>
+</html>
