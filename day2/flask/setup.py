@@ -16,5 +16,6 @@ setup(
         "dynaconf",
         "bootstrap-flask",
         "mistune",
+        "python-slugify",
     ],
 )

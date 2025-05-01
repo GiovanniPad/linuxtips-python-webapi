@@ -5,19 +5,38 @@
 {% extends "base.html.j2" %}
 {% block content %}
 <div class="container">
-    <h1>New Post</h1>
-
     <div class="mt-4 p-5 bg-secondary text-white rounded">
-        {# 
-            Manda para a rota `/new` com o método HTTP POST.
-        #}
-        <form action="/new" method="post">
-            <label for="title">Title: </label><br>
-            <input type="text" name="title"><br>
-            <label for="content">Content: </label><br>
-            <textarea name="content" cols="30" rows="5"></textarea><br>
-            <input type="submit" value="Enviar">
-        </form>
+        {% if post %}
+            {# 
+                Se a variável `post` estiver definida (post a atualizar) imprime
+                o formulário responsável por atualizar os seus dados, com os
+                campos contendo seus valores atuais.
+            #}
+            <h1>Edit post</h1>
+            <form action="/edit" method="post">
+                <input hidden name="slug" value="{{post.slug}}">
+                <label for="title">Title: </label><br>
+                <input type="text" name="title" id="title" value="{{post.title}}"><br>
+                <label for="content">Content: </label><br>
+                <textarea name="content" id="content" cols="30" rows="5">{{ post.content }}</textarea><br>
+                <input type="submit" value="Enviar">
+            </form>        
+        {% else %}
+            {# 
+                Imprime o formulário para criar um novo post, caso a variável `post`
+                não estiver definida, ou seja, não for um formulário de atualização.
+            #}
+            <h1>New Post</h1>
+            <form action="/new" method="post">
+                <label for="title">Title: </label><br>
+                <input type="text" name="title"><br>
+                <label for="content">Content: </label><br>
+                <textarea name="content" cols="30" rows="5"></textarea><br>
+                <input type="submit" value="Enviar">
+            </form>
+        {% endif %}
+
+
     </div>
 </div>
 {% endblock %}

@@ -5,7 +5,13 @@ import click
 from flask import Flask
 
 # Importando todos os controllers para criar os comandos CLI respectivos de cada um.
-from blog.posts import get_all_posts, get_post_by_slug, update_post_by_slug, new_post
+from blog.posts import (
+    get_all_posts,
+    get_post_by_slug,
+    update_post_by_slug,
+    new_post,
+    unpublish_post_by_slug,
+)
 
 
 # Criando um grupo de comandos. Por padrão, usa o nome da função como nome do grupo.
@@ -36,11 +42,14 @@ def new(title, content):
 # neste caso, o nome do comando é explicitamente informado.
 @post.command("list")
 # Função para listar todos os posts do banco de dados.
-def _list():
+@click.option("--published", type=bool, default=True)
+def _list(published: bool):
     """Lists all posts."""
     # Estrutura de repetição exibindo todos os posts.
-    for post in get_all_posts():
+    for post in get_all_posts(published):
+        # Imprimindo os dados do post no terminal.
         click.echo(post)
+        # Linha para separar um post do outro.
         click.echo("-" * 30)
 
 
@@ -61,6 +70,9 @@ def get(slug):
 @post.command()
 # Especificando que pode ser passado um argumento ao chamar este comando.
 @click.argument("slug")
+# Opção para passar um novo título para o post, é opcional e possui valor padrão `None`
+# e tem o seu tipo definido como `string`.
+@click.option("--title", default=None, type=str)
 # Especificando que pode ser passado uma opção `--content` para o comando, que por padrão
 # possui o valor padrão igual a `None` e o seu tipo é `string`.
 @click.option("--content", default=None, type=str)
@@ -68,17 +80,21 @@ def get(slug):
 # possui o valor padrão igual a `None` e o seu tipo é `string`.
 @click.option("--published", default=None, type=str)
 # Função para modificar um post no banco de dados.
-def update(slug, content, published):
+def update(slug, title, content, published):
     """Update post by slug"""
     # Variável de apoio para guardar os novos valores.
     data = {}
 
+    # Verifica se o conteúdo de `title` não está vazio antes de
+    # atribuir no dicionário.
+    if title is not None:
+        data["title"] = title
     # Verifica se o conteúdo de `content` não está vazio antes de
-    # atribuir a variável.
+    # atribuir no dicionário.
     if content is not None:
         data["content"] = content
     # Verifica se o conteúdo de `published` não está vazio antes de atribuir
-    # a variável.
+    # no dicionário.
     if published is not None:
         data["published"] = published.lower() == "true"
 
@@ -89,7 +105,19 @@ def update(slug, content, published):
     click.echo("Post updated.")
 
 
-# TODO: Criar comando para deletar ou despublicar posts.
+# Comando para despublicar os posts, será atribuído ao grupo de
+# comandos `post`.
+@post.command()
+# Argumento obrigatório que indica o slug do post a ser despublicado.
+@click.argument("slug", required=True)
+def unpublish(slug: str):
+    """Unpublish post by slug from database."""
+    # Chamando a função para despublicar o post através do slug, que é
+    # gerado pelo título.
+    post_slug = unpublish_post_by_slug(slug)
+
+    # Mensagem de confirmação, indicando que o post foi despublicado.
+    click.echo(f"Post `{post_slug}` unpublished.")
 
 
 # Função de configuração para fazer com que todos esses comandos aparecem no

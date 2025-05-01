@@ -2,12 +2,7 @@
 from flask import Flask, Blueprint, render_template, abort, request, url_for, redirect
 
 # Importando todos os controllers.
-from blog.posts import (
-    get_all_posts,
-    get_post_by_slug,
-    new_post,
-    # TODO: Criar o update posts.
-)
+from blog.posts import get_all_posts, get_post_by_slug, new_post, update_post_by_slug
 
 # Criando um blueprint com o nome `post`. Neste momento esse blueprint
 # ainda não faz parte da aplicação principal do Flask.
@@ -72,6 +67,57 @@ def new():
     # Caso não for o método POST, renderizada o formulário `form.html.j2`,
     # para a criação de um novo post.
     return render_template("form.html.j2")
+
+
+# Rota para atualizar os dados de um post, esta mesmo rota também invoca
+# o formulário responsável pela atualização com os dados atuais. Por isso
+# ela aceita ambos métodos GET e POST.
+@bp.route("/edit", methods=["GET", "POST"])
+def update():
+    # Se o método for do tipo POST, então é para processar os novos dados e
+    # atualizar o post no banco de dados.
+    if request.method == "POST":
+        # Coletando os dados do formulário enviado e criando um objeto
+        # de apoio.
+        new_data = {}
+        title = request.form.get("title")
+        content = request.form.get("content")
+        slug = request.form.get("slug")
+
+        # Verifica se o título é vazio, pois o título não pode ser uma string
+        # vazia. Caso for vazia retorna um erro 400.
+        if len(title) == 0:
+            # Retornando o erro 400 com sua descripção usando a função `abort`.
+            return abort(code=400, description="Title must not be empty.")
+
+        # Atribuindo os dados atualizados para a variável de novos dados.
+        new_data["title"] = title
+        new_data["content"] = content
+
+        # Atualizando o post com os novos dados inseridos.
+        post = update_post_by_slug(slug, new_data)
+
+        # Verificando se a operação de atualizar os dados do post foi um
+        # sucesso, caso contrário, retorna um erro de código 400.
+        if not post:
+            # Retornando um erro de código 400 com a descrição usando `abort`.
+            return abort(code=400, description="Post not updated.")
+
+        # Redirecionando, no final, para a rota `detail` para exibir o post
+        # com as informações atualizadas. A URL usada para redicionar é criada
+        # com a função `url_for` e o redirecionamento é feito com `redirect`.
+        return redirect(url_for("post.detail", slug=post.get("slug")))
+
+    # Caso a requisição for do tipo GET, vai coletar o valor do slug a partir
+    # da query string.
+    slug = request.args.get("slug")
+
+    # Pesquisar o post no banco de dados.
+    post = get_post_by_slug(slug)
+
+    # Renderizado o template do formulário de atualização do post, passando
+    # no contexto os dados do post na variável `post`.
+    return render_template("form.html.j2", post=post)
 
 
 # Função factory para adicionar as views (blueprint) na aplicação principal.

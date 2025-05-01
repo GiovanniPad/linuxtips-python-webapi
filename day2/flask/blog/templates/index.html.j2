@@ -28,6 +28,10 @@
                     palavra fica em maiúsculo).
                 #}
                 <a href="{{url_for('post.detail', slug=post.slug)}}">{{post.title | title }}</a>
+                {# 
+                    Botão responsável por invocar o formulário de atualizar o post em questão.
+                #}
+                <a type="button" class="btn btn-warning float-end" href="{{url_for('post.update', slug=post.slug)}}">Editar</a>
             </li>
             {% endfor %}
         </ul>
