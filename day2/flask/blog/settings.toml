@@ -11,4 +11,8 @@ extensions = [
     "flask_bootstrap:Bootstrap5",
     "blog.views:configure",
     "blog.plugins:configure",
+    "blog.auth:configure",
 ]
+# Secret key usada para gerar os hashes das sessões e das senhas armazenadas
+# no banco de dados.
+secret_key = "e647b450256b56fad55fa2f418b2c1ab407d06d30182e26c30606fe4ac100e2e"

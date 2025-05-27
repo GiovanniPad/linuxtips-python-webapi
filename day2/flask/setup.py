@@ -17,5 +17,6 @@ setup(
         "bootstrap-flask",
         "mistune",
         "python-slugify",
+        "flask-simplelogin",
     ],
 )

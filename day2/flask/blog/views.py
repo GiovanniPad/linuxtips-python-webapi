@@ -1,6 +1,10 @@
 # Importando todas as funções e classes necessárias.
 from flask import Flask, Blueprint, render_template, abort, request, url_for, redirect
 
+# Decorator responsável por indicar que a view necessita que tenha uma sessão
+# autenticada.
+from flask_simplelogin import login_required
+
 # Importando todos os controllers.
 from blog.posts import get_all_posts, get_post_by_slug, new_post, update_post_by_slug
 
@@ -44,7 +48,10 @@ def detail(slug):
 
 
 # Registra uma rota `/new` no blueprint, que aceita os métodos GET e POST.
+# `login_required` indica que esta view só pode ser acessada se o usuário
+# estiver logado.
 @bp.route("/new", methods=["GET", "POST"])
+@login_required()
 def new():
     # Se o método passado for POST, coleta os dados do formulário
     # e cria um novo post no banco de dados.
