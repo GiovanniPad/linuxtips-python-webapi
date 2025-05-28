@@ -18,5 +18,6 @@ setup(
         "mistune",
         "python-slugify",
         "flask-simplelogin",
+        "flask-admin",
     ],
 )

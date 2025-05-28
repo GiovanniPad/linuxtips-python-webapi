@@ -1,14 +1,19 @@
 # biblioteca para criar comandos no terminal.
 import click
+
 # Conexão com o banco de dados.
 from blog.database import mongo
+
 # Funções para gerar senhas criptografadas (hashes) e verificar se é uma
 # senha válida.
 from werkzeug.security import generate_password_hash, check_password_hash
+
 # Extensão para trabalhar com login por sessão no flask.
 from flask_simplelogin import SimpleLogin
+
 # Apenas para type annotation.
 from flask import Flask
+
 
 # Função para criar um usuário no banco de dados, com a senha criptografada.
 def create_user(**data):
@@ -19,13 +24,10 @@ def create_user(**data):
     if "username" not in data or "password" not in data:
         # Invoca um erro se alguma das informações não estiver presente.
         raise ValueError("username and password are required.")
-    
+
     # Substitui a senha inserida pelo usuário por uma versão com criptografia
     # da mesma senha. Usa o método `scrypt` para gerar o hash.
-    data["password"] = generate_password_hash(
-        data.pop("password"),
-        method="scrypt"
-    )
+    data["password"] = generate_password_hash(data.pop("password"), method="scrypt")
 
     # TODO: Verificar se o usuário já existe
 
@@ -34,6 +36,7 @@ def create_user(**data):
 
     # Retorna os dados do usuário criado.
     return data
+
 
 # Função para validar o login toda vez que o usuário tentar realizá-lo.
 def validate_login(user):
@@ -44,11 +47,9 @@ def validate_login(user):
     if "username" not in user or "password" not in user:
         # Invoca um erro se alguma das informações não estiver presente.
         raise ValueError("username and password are required.")
-    
+
     # Pesquisa no banco de dados pelo o usuário inserido.
-    db_user = mongo.db.get_collection("users").find_one(
-        {"username": user["username"]}
-    )
+    db_user = mongo.db.get_collection("users").find_one({"username": user["username"]})
 
     # Verifica se retornou algum usuário válido e se a senha passada é igual
     # a senha criptografada (hash) armazenada no banco de dados.
@@ -57,6 +58,7 @@ def validate_login(user):
         return True
     # Retorna False para indicar que os dados de login são inválidos.
     return False
+
 
 # Função (padrão Application Factory) para adicionar a parte de login a
 # aplicação Flask principal. Recebe `app` que é a aplicação principal.
