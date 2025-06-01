@@ -11,6 +11,7 @@ setup(
     packages=["djblog", "blog"],
     # Dependências necessárias para executar o app.
     requires=[
-        "django"
+        "django",
+        "django-markdownify",
     ],
 )
