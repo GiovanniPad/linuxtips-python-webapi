@@ -1,5 +1,8 @@
 # Arquivo para definir as views do app `blog`.
 
+# Decorator para indicar que determinada view só pode ser acessada caso o
+# usuário estiver logado.
+from django.contrib.auth.decorators import login_required
 
 # Classe para definir um formulário de um model.
 from django.forms import ModelForm
@@ -37,6 +40,9 @@ class PostForm(ModelForm):
 # Function view, view criada no formato de função, representa a view para
 # criar novos posts.
 # `request` é o objeto que recebe todas as informações da requisição.
+# `login_required` decorator que indica que a view precisa de autenticação
+# para acessar.
+@login_required
 def new_post(request):
     # Se o método da requisição for do tipo POST, cria um novo post.
     if request.method == "POST":

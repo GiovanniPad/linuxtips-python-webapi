@@ -3,7 +3,7 @@
 # Módulo de admin.
 from django.contrib import admin
 # Função para mapear as views.
-from django.urls import path
+from django.urls import path, include
 # Views criadas para serem mapeadas.
 from blog.views import new_post, PostDetail, PostList
 
@@ -11,6 +11,8 @@ from blog.views import new_post, PostDetail, PostList
 urlpatterns = [
     # Mapeia todas as URLs do módulo admin para a URL principal `admin/`.
     path("admin/", admin.site.urls),
+    # Inclui as URLs já definidas, responsáveis pela parte de administrar usuários.
+    path("accounts/", include("django.contrib.auth.urls")),
     # Mapeia a view `new_post` para a URL `new/`, define um nome para a rota
     # como `new_post` explicitamente. Se não usar, o nome da view é usado.
     path("new/", new_post, name="new_post"),

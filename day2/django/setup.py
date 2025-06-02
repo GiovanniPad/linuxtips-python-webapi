@@ -10,8 +10,9 @@ setup(
     # Pacotes (módulos) necessários e que vão ser instalados no app.
     packages=["djblog", "blog"],
     # Dependências necessárias para executar o app.
-    requires=[
+    install_requires=[
         "django",
         "django-markdownify",
+        "django-extensions"
     ],
 )

@@ -1,0 +1,16 @@
+<!-- Template responsável por exibir o formulário de login -->
+
+<!-- Estende do template base -->
+{% extends "base.html" %}
+
+<!-- Bloco de conteúdo -->
+{% block content %}
+<h2>Log in</h2>
+<form method="post">
+    <!-- Token para proteção de ataques CSRF -->
+    {% csrf_token %}
+    <!-- Renderiza o formulário no formato de parágrafos -->
+    {{ form.as_p }}
+    <button type="submit">Log in</button>
+</form>
+{% endblock content %}
