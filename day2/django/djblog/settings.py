@@ -1,4 +1,5 @@
 from pathlib import Path
+from dynaconf import DjangoDynaconf
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -117,3 +118,11 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+settings = DjangoDynaconf(
+    __name__,
+    load_dotenv=False,
+    envvar_prefix="BLOG",
+    env_switcher="BLOG_ENV",
+    settings_file=["blog_settings.toml"]
+)

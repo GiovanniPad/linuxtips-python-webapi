@@ -8,11 +8,13 @@ setup(
     # Versão
     version="0.1.0",
     # Pacotes (módulos) necessários e que vão ser instalados no app.
-    packages=["djblog", "blog"],
+    packages=["djblog", "blog", "templates"],
+    include_package_data=True,
     # Dependências necessárias para executar o app.
     install_requires=[
         "django",
         "django-markdownify",
-        "django-extensions"
+        "django-extensions",
+        "dynaconf"
     ],
 )
