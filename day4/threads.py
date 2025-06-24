@@ -1,5 +1,6 @@
 # Biblioteca para manipular valores de tempo.
 import time
+
 # Módulo para executar tarefas assíncronas utilizando concorrência com threads
 # ou processos.
 import concurrent.futures
@@ -36,7 +37,7 @@ def main():
     # instruções
     start = time.perf_counter()
     print("Início")
-    
+
     # Abre um gerenciador de contexto e nele vai ter um executor que vai abrir
     # uma ThreadPool para executar todo o código dentro desse contexto de maneira
     # concorrente utilizando threads.
@@ -70,5 +71,6 @@ def main():
     # Imprimindo o tempo que levou para executar todo o trecho, fazendo a diferença entre
     # o início do contador e o contador final.
     print(f"Finished in: {round(finish - start, 2)} seconds")
+
 
 main()

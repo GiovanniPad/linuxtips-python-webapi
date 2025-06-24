@@ -2,8 +2,10 @@
 
 # Módulo de admin.
 from django.contrib import admin
+
 # Função para mapear as views.
 from django.urls import path, include
+
 # Views criadas para serem mapeadas.
 from blog.views import new_post, PostDetail, PostList
 

@@ -11,6 +11,7 @@ import asyncio
 # O uso da palavra `await` faz com que a execução seja pausada para aguardar até
 # que a promise/future termine sua execução.
 
+
 # Ao usar `async` a função passa a ser uma corrotina, uma corrotina
 # é uma espécie de função com suporte a operações assíncronas.
 async def consulta_dados():
@@ -38,16 +39,16 @@ async def grava_log():
 
 
 # Corrotina principal.
-async def main():  
+async def main():
     # Para executar uma corrotina de forma assíncrona e não bloqueante
     # é necessário tranformá-la em uma task mandando a corrotina para o event loop.
-    
+
     # Nesta situação a palavra await tem um papel muito importante, pois ao usá-la
     # dentro de uma task async, a execução da corrotina vai ser suspensa e no lugar
     # dela vai ser executados outras corrotinas que estão na fila, dessa forma
     # o código fica não bloqueante, enquanto espera a operação de um terminar, outro
     # é executado.
-    
+
     # Porém, neste caso, não temos mais controle na ordem de execução das funções, pois
     # elas vão ser executadas conforme for possível, sendo gerenciadas automaticamente
     # pelo sistema operacional.

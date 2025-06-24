@@ -1,18 +1,18 @@
 import time
 
 
-def consulta_dados(): # I/O Bound
+def consulta_dados():  # I/O Bound
     print("Consultando dados...")
     time.sleep(2)
     return "dados"
 
 
-def processa_dados(dados): # CPU Bound
+def processa_dados(dados):  # CPU Bound
     print("Processando dados...")
     time.sleep(2)
 
 
-def grava_log(): # I/O Bound
+def grava_log():  # I/O Bound
     print("Gravando log...")
     time.sleep(2)
 
@@ -26,5 +26,6 @@ def main():
     print("Fim")
     finish = time.perf_counter()
     print(f"Finished in: {round(finish - start, 2)} seconds")
+
 
 main()

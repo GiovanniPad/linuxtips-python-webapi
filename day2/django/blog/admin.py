@@ -1,5 +1,6 @@
 # Módulo para trabalhar com interface administrativa do Django.
 from django.contrib import admin
+
 # Model `Post`.
 from blog.models import Post
 
@@ -40,6 +41,7 @@ class PostAdmin(admin.ModelAdmin):
             post.published = not post.published
             # Salva as alterações no banco de dados.
             post.save()
+
 
 # Registra a interface administrativa PostAdmin para ser exibida ao usuário.
 # É necessário passar o Model que a classe da interface administrativa deve exibir.

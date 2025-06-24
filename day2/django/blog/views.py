@@ -93,4 +93,3 @@ class PostDetail(DetailView):
     model = Post
     # Define explicitamente qual o nome do template usado para essa view.
     template_name = "detail.html"
-

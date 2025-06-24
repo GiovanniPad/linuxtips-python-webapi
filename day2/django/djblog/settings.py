@@ -124,5 +124,5 @@ settings = DjangoDynaconf(
     load_dotenv=False,
     envvar_prefix="BLOG",
     env_switcher="BLOG_ENV",
-    settings_file=["blog_settings.toml"]
+    settings_file=["blog_settings.toml"],
 )

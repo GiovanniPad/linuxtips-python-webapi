@@ -11,10 +11,5 @@ setup(
     packages=["djblog", "blog", "templates"],
     include_package_data=True,
     # Dependências necessárias para executar o app.
-    install_requires=[
-        "django",
-        "django-markdownify",
-        "django-extensions",
-        "dynaconf"
-    ],
+    install_requires=["django", "django-markdownify", "django-extensions", "dynaconf"],
 )

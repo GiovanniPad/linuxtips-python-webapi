@@ -3,8 +3,10 @@
 
 # Importa as classes responsáveis por criar o comando e representar um erro.
 from django.core.management.base import BaseCommand, CommandError
+
 # Model `Post`
 from blog.models import Post
+
 # Função para criar slugs.
 from django.utils.text import slugify
 
@@ -13,9 +15,9 @@ from django.utils.text import slugify
 # herdar de `BaseCommand`.
 class Command(BaseCommand):
     """Adds new post to the database."""
+
     # Descrição que vai ser exibida ao usar `--help` no comando.
     help = "Creates a new Post in the database."
-
 
     # Método para declarar quais os argumentos que este comando vai receber
     # `parser` é tipo o argparser da biblioteca sys.
@@ -26,7 +28,6 @@ class Command(BaseCommand):
         # Declara outro argumento de nome `content` do tipo string e que é
         # obrigatório também, ele representa o conteúdo do post.
         parser.add_argument("--content", type=str, required=True)
-
 
     # Método que vai lidar com o processamento de dados do comando, ou seja,
     # é onde é declarado o que o comando vai fazer e como ele vai fazer.
@@ -41,7 +42,7 @@ class Command(BaseCommand):
             post = Post.objects.create(
                 title=options["title"],
                 slug=slugify(options["title"]),
-                content=options["content"]
+                content=options["content"],
             )
         # Captura qualquer exceção gerada ao tentar criar um novo Post.
         except Exception as e:
@@ -51,6 +52,4 @@ class Command(BaseCommand):
         else:
             # Imprime no `stdout` (terminal) a mensagem de sucesso, indicando
             # que o Post foi criado com sucesso.
-            self.stdout.write(self.style.SUCCESS(
-                f"Post '{post.title}' created."
-            ))
+            self.stdout.write(self.style.SUCCESS(f"Post '{post.title}' created."))
